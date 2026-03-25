@@ -52,10 +52,11 @@ export default function Home() {
               className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-500"
             >
               Add to Cart
-            </button>const removeFromCart = (index: number) => {
+              const removeFromCart = (index: number) => {
   const updatedCart = cart.filter((_, i) => i !== index);
   setCart(updatedCart);
 };
+            </button>
           </div>
         ))}
       </section>
