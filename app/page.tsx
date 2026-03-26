@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 
-const products = [ { id: 1, name: "Kente Cloth", price: 120 }, { id: 2, name: "Shea Butter", price: 25 }, { id: 3, name: "African Print Shirt", price: 60 }, ];
+const products = [ { id: 1, name: "Kente Cloth", price: 120, image: "https://images.unsplash.com/photo-1603252109303-2751441dd157" }, { id: 2, name: "Shea Butter", price: 25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e" }, { id: 3, name: "African Print Shirt", price: 60, image: "https://images.unsplash.com/photo-1520975922284-9e0ce827c0b1" }, ];
 
-export default function Home() { const [cart, setCart] = useState<any[]>([]);
+export default function Home() { const [cart, setCart] = useState<any[]>([]); const [showCheckout, setShowCheckout] = useState(false);
 
 const addToCart = (product: any) => { setCart([...cart, product]); };
 
@@ -12,78 +12,89 @@ const removeFromCart = (index: number) => { setCart(cart.filter((_, i) => i !== 
 
 const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-return ( <main className="min-h-screen bg-gray-100 text-gray-900"> {/* Navbar */} <nav className="bg-black text-white px-8 py-4 flex justify-between items-center"> <h1 className="text-2xl font-bold tracking-wide">The Ghana Shop GH</h1> <div className="flex gap-4"> <span>Home</span> <span>Shop</span> <span>Contact</span> </div> </nav>
+const handleCheckout = () => { setShowCheckout(true); };
 
-{/* Hero Section */}
-  <section className="text-center py-16 bg-gradient-to-r from-black to-gray-800 text-white">
-    <h2 className="text-4xl font-bold mb-4">Luxury African Products</h2>
-    <p className="text-lg opacity-80">Premium quality. Authentic style.</p>
+return ( <main className="min-h-screen bg-neutral-950 text-white"> {/* Navbar */} <nav className="flex justify-between items-center px-10 py-6 border-b border-neutral-800"> <h1 className="text-2xl font-semibold tracking-widest">GHANA LUXE</h1> <div className="flex gap-6 text-sm opacity-80"> <span>Home</span> <span>Shop</span> <span>Contact</span> </div> </nav>
+
+{/* Hero */}
+  <section className="text-center py-24">
+    <h2 className="text-5xl font-light mb-6">Premium African Luxury</h2>
+    <p className="text-neutral-400">Luxury products delivered to UAE & worldwide</p>
   </section>
 
   {/* Products */}
-  <section className="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+  <section className="px-10 grid grid-cols-1 md:grid-cols-3 gap-10">
     {products.map((product) => (
-      <div
-        key={product.id}
-        className="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl transition"
-      >
-        <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-        <p className="text-gray-500 mb-4">${product.price}</p>
-        <button
-          onClick={() => addToCart(product)}
-          className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800"
-        >
-          Add to Cart
-        </button>
+      <div key={product.id} className="bg-neutral-900 rounded-2xl overflow-hidden hover:scale-105 transition">
+        <img src={product.image} className="w-full h-64 object-cover" />
+        <div className="p-5">
+          <h3 className="text-lg">{product.name}</h3>
+          <p className="text-neutral-400 mb-4">${product.price}</p>
+          <button
+            onClick={() => addToCart(product)}
+            className="w-full bg-white text-black py-2 rounded-lg"
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
     ))}
   </section>
 
   {/* Cart */}
-  <section className="p-8">
-    <div className="bg-white p-6 rounded-2xl shadow-lg max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">🛒 Your Cart</h2>
+  <section className="px-10 py-20">
+    <div className="max-w-2xl mx-auto bg-neutral-900 p-8 rounded-2xl">
+      <h2 className="text-2xl mb-6">Your Cart</h2>
 
       {cart.length === 0 ? (
-        <p className="text-gray-500">Your cart is empty</p>
+        <p className="text-neutral-500">Cart is empty</p>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-5">
           {cart.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center border-b pb-2"
-            >
+            <div key={index} className="flex justify-between border-b border-neutral-800 pb-3">
               <div>
-                <p className="font-medium">{item.name}</p>
-                <p className="text-gray-400 text-sm">${item.price}</p>
+                <p>{item.name}</p>
+                <p className="text-sm text-neutral-400">${item.price}</p>
               </div>
-
-              <button
-                onClick={() => removeFromCart(index)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                Remove
-              </button>
+              <button onClick={() => removeFromCart(index)} className="text-red-400">Remove</button>
             </div>
           ))}
 
-          <div className="flex justify-between font-bold text-lg pt-4">
-            <span>Total:</span>
+          <div className="flex justify-between pt-4 text-lg">
+            <span>Total</span>
             <span>${total}</span>
           </div>
 
-          <button className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 mt-4">
-            Checkout
+          <button
+            onClick={handleCheckout}
+            className="w-full mt-6 bg-white text-black py-3 rounded-xl"
+          >
+            Proceed to Checkout
           </button>
         </div>
       )}
     </div>
   </section>
 
-  {/* Footer */}
-  <footer className="bg-black text-white text-center py-6 mt-10">
-    <p>© 2026 The Ghana Shop GH. All rights reserved.</p>
-  </footer>
-</main>
+  {/* Checkout Modal */}
+  {showCheckout && (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
+      <div className="bg-white text-black p-8 rounded-xl w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Checkout</h2>
 
-); }
+        <input placeholder="Full Name" className="w-full border p-2 mb-3" />
+        <input placeholder="Email" className="w-full border p-2 mb-3" />
+        <input placeholder="Address (UAE)" className="w-full border p-2 mb-3" />
+
+        <button
+          onClick={() => {
+            alert("Redirecting to payment...");
+            window.location.href = "https://buy.stripe.com/test";
+          }}
+          className="w-full bg-black text-white py-3 rounded-lg mt-4"
+        >
+          Pay with Card (Stripe)
+        </button>
+
+        <button
+          onClick={() => setShowChec
