@@ -70,14 +70,23 @@ export default function Home() {
         ) : (
           <div className="space-y-2">
             {cart.map((item, index) => (
-              <div
-                key={index}
-                className="bg-white p-3 rounded shadow flex justify-between"
-              >
-                <span>{item.name}</span>
-                <span>${item.price}</span>
-              </div>
-            ))}
+  <div
+    key={index}
+    className="bg-white p-3 rounded shadow flex justify-between items-center"
+  >
+    <div>
+      <p>{item.name}</p>
+      <p className="text-sm text-gray-500">${item.price}</p>
+    </div>
+
+    <button
+      onClick={() => removeFromCart(index)}
+      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-400"
+    >
+      Remove
+    </button>
+  </div>
+))}
 
             <div className="font-bold pt-4">
               Total: $
