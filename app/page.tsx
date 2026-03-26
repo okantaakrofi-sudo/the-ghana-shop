@@ -14,6 +14,11 @@ export default function Home() {
     setCart([...cart, product]);
   };
 
+  const removeFromCart = (index: number) => {
+    const updatedCart = cart.filter((_, i) => i !== index);
+    setCart(updatedCart);
+  };
+
   return (
     <main className="bg-gray-100 min-h-screen">
 
@@ -25,73 +30,57 @@ export default function Home() {
         </button>
       </header>
 
-      {/* Hero */}
-      <section className="text-center py-10">
-        <h2 className="text-3xl font-bold mb-2">
-          Authentic Ghanaian Products
-        </h2>
-        <p className="text-gray-600">
-          Shop quality items from Ghana 🇬🇭
-        </p>
-      </section>
-
       {/* Products */}
-      <section className="px-6 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+      <section className="px-6 py-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
         {products.map((product) => (
           <div
             key={product.id}
-            className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition"
+            className="bg-white p-4 rounded-xl shadow"
           >
-            <div className="h-32 bg-gray-200 rounded mb-3"></div>
-
-            <h3 className="font-semibold text-lg">{product.name}</h3>
+            <h3 className="font-semibold">{product.name}</h3>
             <p className="text-green-600 font-bold">${product.price}</p>
 
             <button
               onClick={() => addToCart(product)}
-              className="mt-3 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-500"
+              className="mt-3 w-full bg-green-600 text-white py-2 rounded"
             >
               Add to Cart
-              const removeFromCart = (index: number) => {
-  const updatedCart = cart.filter((_, i) => i !== index);
-  setCart(updatedCart);
-};
             </button>
           </div>
         ))}
       </section>
 
-      {/* Cart Section */}
-      <section className="px-6 py-10">
-        <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+      {/* Cart */}
+      <section className="px-6 pb-10">
+        <h2 className="text-xl font-bold mb-3">Your Cart</h2>
 
         {cart.length === 0 ? (
-          <p className="text-gray-500">Cart is empty</p>
+          <p>Cart is empty</p>
         ) : (
           <div className="space-y-2">
             {cart.map((item, index) => (
-  <div
-    key={index}
-    className="bg-white p-3 rounded shadow flex justify-between items-center"
-  >
-    <div>
-      <p>{item.name}</p>
-      <p className="text-sm text-gray-500">${item.price}</p>
-    </div>
+              <div
+                key={index}
+                className="bg-white p-3 rounded shadow flex justify-between items-center"
+              >
+                <div>
+                  <p>{item.name}</p>
+                  <p className="text-sm text-gray-500">${item.price}</p>
+                </div>
 
-    <button
-      onClick={() => removeFromCart(index)}
-      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-400"
-    >
-      Remove
-    </button>
-  </div>
-))}
+                <button
+                  onClick={() => removeFromCart(index)}
+                  className="bg-red-500 text-white px-3 py-1 rounded"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
 
-            <div className="font-bold pt-4">
+            <p className="font-bold mt-4">
               Total: $
               {cart.reduce((total, item) => total + item.price, 0)}
-            </div>
+            </p>
           </div>
         )}
       </section>
