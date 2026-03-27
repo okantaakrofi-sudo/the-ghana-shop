@@ -1,5 +1,8 @@
 "use client";
 
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
+
 import { useState } from "react";
 
 const products = [ { id: 1, name: "Kente Cloth", price: 120, image: "https://images.unsplash.com/photo-1603252109303-2751441dd157" }, { id: 2, name: "Shea Butter", price: 25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e" }, { id: 3, name: "African Print Shirt", price: 60, image: "https://images.unsplash.com/photo-1520975922284-9e0ce827c0b1" }, ];
