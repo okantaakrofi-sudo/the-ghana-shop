@@ -1,7 +1,7 @@
 "use client";
 
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { db } from "../lib/firebase";
 import { useState } from "react";
 
 const products = [
