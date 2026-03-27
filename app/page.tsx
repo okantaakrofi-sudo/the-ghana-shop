@@ -8,7 +8,11 @@ import { useState } from "react";
 const products = [ { id: 1, name: "Kente Cloth", price: 120, image: "https://images.unsplash.com/photo-1603252109303-2751441dd157" }, { id: 2, name: "Shea Butter", price: 25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e" }, { id: 3, name: "African Print Shirt", price: 60, image: "https://images.unsplash.com/photo-1520975922284-9e0ce827c0b1" }, ];
 
 export default function Home() { const [cart, setCart] = useState<any[]>([]); const [showCheckout, setShowCheckout] = useState(false);
-
+                                
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+const [address, setAddress] = useState("");
+                                
 const addToCart = (product: any) => { setCart([...cart, product]); };
 
 const removeFromCart = (index: number) => { setCart(cart.filter((_, i) => i !== index)); };
@@ -17,22 +21,26 @@ const total = cart.reduce((sum, item) => sum + item.price, 0);
 
 const handleCheckout = () => { setShowCheckout(true); };
 const placeOrder = async () => {
-  try {
-    // Save order to Firebase
+  if (!name || !email || !address) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  // 🚀 Go to Stripe FIRST
+  window.location.href = "https://buy.stripe.com/test_xxxxxxxx";
+};
+
     await addDoc(collection(db, "orders"), {
-      items: cart,
-      total,
-      createdAt: new Date(),
-    });
+  items: cart,
+  total,
+  name,
+  email,
+  address,
+  createdAt: new Date(),
+});
 
-    alert("✅ Order saved!");
-
-    // Clear cart
-    setCart([]);
-    setShowCheckout(false);
-
-    // Redirect to Stripe AFTER saving
-    window.location.href = "https://buy.stripe.com/test_xxxxxxxxx";
+setCart([]);                            
+ setShowCheckout(false);
 
   } catch (error) {
     console.error(error);
@@ -147,27 +155,33 @@ return ( <main className="min-h-screen bg-black text-white"> {/* Navbar */} <nav
 
       {/* Inputs */}
       <input
-        placeholder="Full Name"
-        className="w-full border border-neutral-700 bg-neutral-800 p-3 mb-4 rounded-lg outline-none focus:border-white"
-      />
+  placeholder="Full Name"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  className="w-full border p-2 mb-3"
+/>
 
-      <input
-        placeholder="Email"
-        className="w-full border border-neutral-700 bg-neutral-800 p-3 mb-4 rounded-lg outline-none focus:border-white"
-      />
+<input
+  placeholder="Email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full border p-2 mb-3"
+/>
 
-      <input
-        placeholder="Address (UAE)"
-        className="w-full border border-neutral-700 bg-neutral-800 p-3 mb-6 rounded-lg outline-none focus:border-white"
-      />
-
+<input
+  placeholder="Address (UAE)"
+  value={address}
+  onChange={(e) => setAddress(e.target.value)}
+  className="w-full border p-2 mb-3"
+/> 
+      
       {/* Complete Purchase */}
       <button
-        onClick={placeOrder}
-        className="w-full bg-gradient-to-r from-black to-gray-800 text-white py-3 rounded-lg hover:opacity-90 transition"
-      >
-        Complete Purchase
-      </button>
+  onClick={placeOrder}
+  className="w-full bg-black text-white py-3 rounded-lg mt-4"
+>
+  Pay with Card (Stripe)
+</button>
 
       {/* Close Button */}
       <button
