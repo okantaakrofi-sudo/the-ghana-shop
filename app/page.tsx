@@ -2,195 +2,215 @@
 
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
-
 import { useState } from "react";
 
-const products = [ { id: 1, name: "Kente Cloth", price: 120, image: "https://images.unsplash.com/photo-1603252109303-2751441dd157" }, { id: 2, name: "Shea Butter", price: 25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e" }, { id: 3, name: "African Print Shirt", price: 60, image: "https://images.unsplash.com/photo-1520975922284-9e0ce827c0b1" }, ];
+const products = [
+  { id: 1, name: "Kente Cloth", price: 120, image: "https://images.unsplash.com/photo-1603252109303-2751441dd157" },
+  { id: 2, name: "Shea Butter", price: 25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e" },
+  { id: 3, name: "African Print Shirt", price: 60, image: "https://images.unsplash.com/photo-1520975922284-9e0ce827c0b1" },
+];
 
-export default function Home() { const [cart, setCart] = useState<any[]>([]); const [showCheckout, setShowCheckout] = useState(false);
-                                
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [address, setAddress] = useState("");
-                                
-const addToCart = (product: any) => { setCart([...cart, product]); };
+export default function Home() {
+  const [cart, setCart] = useState<any[]>([]);
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
 
-const removeFromCart = (index: number) => { setCart(cart.filter((_, i) => i !== index)); };
+  const addToCart = (product: any) => {
+    setCart([...cart, product]);
+  };
 
-const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const removeFromCart = (index: number) => {
+    setCart(cart.filter((_, i) => i !== index));
+  };
 
-const handleCheckout = () => { setShowCheckout(true); };
-const placeOrder = async () => {
-  if (!name || !email || !address) {
-    alert("Please fill all fields");
-    return;
-  }
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  // 🚀 Go to Stripe FIRST
-  window.location.href = "https://buy.stripe.com/test_xxxxxxxx";
-};
+  const handleCheckout = () => {
+    setShowCheckout(true);
+  };
 
-    await addDoc(collection(db, "orders"), {
-  items: cart,
-  total,
-  name,
-  email,
-  address,
-  createdAt: new Date(),
-});
+  const placeOrder = async () => {
+    // 1. Validation check
+    if (!name || !email || !address) {
+      alert("Please fill in all the details so we can process your order.");
+      return;
+    }
 
-setCart([]);                            
- setShowCheckout(false);
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
 
-  } catch (error) {
-    console.error(error);
-    alert("❌ Error saving order");
-  }
-};                               
+    try {
+      // 2. Save to Firestore
+      const docRef = await addDoc(collection(db, "orders"), {
+        customerName: name,
+        customerEmail: email,
+        customerAddress: address,
+        items: cart,
+        totalAmount: total,
+        status: "pending",
+        orderDate: new Date().toISOString(),
+      });
 
-return ( <main className="min-h-screen bg-black text-white"> {/* Navbar */} <nav className="flex justify-between items-center px-10 py-6 border-b border-neutral-800"> <h1 className="text-2xl font-semibold tracking-widest">GHANA LUXE</h1> <div className="flex gap-6 text-sm opacity-80"> <span>Home</span> <span>Shop</span> <span>Contact</span> </div> </nav>
+      console.log("Order ID: ", docRef.id);
+      
+      // 3. Optional: Redirect to WhatsApp automatically
+      const whatsappMsg = `Hi Ghana Luxe! I've placed an order (#${docRef.id.slice(0,5)}). Total: AED ${total}. Name: ${name}.`;
+      window.open(`https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
 
-{/* Hero */}
-  <section className="text-center py-24">
-    <h2 className="text-5xl font-light mb-6">Premium African Luxury</h2>
-    <p className="text-neutral-400">Luxury products delivered to UAE & worldwide</p>
-  </section>
+      alert("Order placed! We will contact you soon.");
 
-  {/* Products */}
-  <section className="px-10 grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
-  {products.map((product) => (
-    <div
-      key={product.id}
-      className="bg-neutral-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 hover:-translate-y-2"
-    >
-      <img
-        src={product.image}
-        className="w-full h-64 object-cover"
-      />
+      // 4. Reset
+      setCart([]);
+      setName("");
+      setEmail("");
+      setAddress("");
+      setShowCheckout(false);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      alert("Error placing order. Please check your connection.");
+    }
+  };
 
-      <div className="p-6">
-        <h3 className="text-xl font-semibold tracking-wide">
-          {product.name}
-        </h3>
+  return (
+    <main className="min-h-screen bg-black text-white font-sans">
+      {/* Navbar */}
+      <nav className="flex justify-between items-center px-10 py-6 border-b border-neutral-800 sticky top-0 bg-black/90 backdrop-blur-md z-40">
+        <h1 className="text-2xl font-semibold tracking-widest">GHANA LUXE</h1>
+        <div className="flex gap-6 text-sm opacity-80 uppercase tracking-tighter">
+          <span className="cursor-pointer hover:text-neutral-400">Home</span>
+          <span className="cursor-pointer hover:text-neutral-400">Shop</span>
+          <span className="cursor-pointer hover:text-neutral-400">Cart ({cart.length})</span>
+        </div>
+      </nav>
 
-        <p className="text-neutral-400 mt-2 text-lg">
-          ${product.price}
-        </p>
+      {/* Hero */}
+      <section className="text-center py-24 px-6">
+        <h2 className="text-5xl md:text-7xl font-light mb-6 tracking-tight">Premium African Luxury</h2>
+        <p className="text-neutral-400 text-lg">Hand-crafted quality delivered across the UAE & worldwide</p>
+      </section>
 
-        <button
-          onClick={() => addToCart(product)}
-          className="mt-5 w-full bg-gradient-to-r from-black to-gray-800 text-white py-3 rounded-lg hover:opacity-90 transition"
-        >
-          Add to Cart
-        </button>
-      </div>
-    </div>
-  ))}
-</section>
+      {/* Products Grid */}
+      <section className="px-6 md:px-10 grid grid-cols-1 md:grid-cols-3 gap-10">
+        {products.map((product) => (
+          <div
+            key={product.id}
+            className="bg-neutral-900 rounded-2xl overflow-hidden border border-neutral-800 hover:border-neutral-700 transition duration-300 group"
+          >
+            <div className="overflow-hidden">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-medium tracking-wide">{product.name}</h3>
+              <p className="text-neutral-400 mt-2 text-lg">AED {product.price}</p>
+              <button
+                onClick={() => addToCart(product)}
+                className="mt-5 w-full bg-gradient-to-r from-neutral-800 to-black text-white py-3 rounded-lg border border-neutral-700 font-semibold hover:from-white hover:to-neutral-200 hover:text-black transition-all duration-300"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        ))}
+      </section>
 
-  {/* Cart */}
-<section className="px-6 md:px-10 py-20">
-  <div className="max-w-2xl mx-auto bg-neutral-900 p-8 rounded-2xl shadow-xl">
+      {/* Cart Section */}
+      <section className="px-6 md:px-10 py-24">
+        <div className="max-w-2xl mx-auto bg-neutral-900/50 p-8 rounded-3xl border border-neutral-800 shadow-2xl">
+          <h2 className="text-3xl font-semibold mb-8 tracking-wide">Your Selection</h2>
 
-    <h2 className="text-3xl font-semibold mb-8 tracking-wide">
-      Your Cart
-    </h2>
+          {cart.length === 0 ? (
+            <p className="text-neutral-500 text-center py-10 italic">Your cart is currently empty.</p>
+          ) : (
+            <>
+              <div className="space-y-6">
+                {cart.map((item, index) => (
+                  <div key={index} className="flex justify-between items-center border-b border-neutral-800 pb-4">
+                    <div>
+                      <p className="font-medium text-white">{item.name}</p>
+                      <p className="text-sm text-neutral-400">AED {item.price}</p>
+                    </div>
+                    <button
+                      onClick={() => removeFromCart(index)}
+                      className="text-red-400 text-xs uppercase tracking-widest hover:text-red-300 transition"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
 
-    {cart.length === 0 ? (
-      <p className="text-neutral-500 text-center py-10">
-        Your cart is empty
-      </p>
-    ) : (
-      <>
-        <div className="space-y-5">
-          {cart.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center border-b border-neutral-800 pb-4"
-            >
-              <div>
-                <p className="text-lg">{item.name}</p>
-                <p className="text-sm text-neutral-400">
-                  ${item.price}
-                </p>
+              <div className="flex justify-between items-center mt-8 text-2xl font-light">
+                <span className="text-neutral-400">Total</span>
+                <span className="font-semibold text-white">AED {total}</span>
               </div>
 
               <button
-                onClick={() => removeFromCart(index)}
-                className="text-red-500 hover:text-red-400 text-sm transition"
+                onClick={handleCheckout}
+                className="mt-10 w-full bg-white text-black py-4 rounded-full font-bold text-lg hover:bg-neutral-200 transition-all shadow-xl"
               >
-                Remove
+                Proceed to Checkout
               </button>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Checkout Modal */}
+      {showCheckout && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-neutral-900 border border-neutral-800 text-white p-8 rounded-3xl w-full max-w-md shadow-2xl">
+            <h2 className="text-2xl font-semibold mb-6 text-center tracking-tight">Delivery Details</h2>
+            
+            <div className="space-y-4">
+              <input
+                placeholder="Full Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-black border border-neutral-800 p-4 rounded-xl focus:outline-none focus:border-neutral-500 transition"
+              />
+              <input
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-black border border-neutral-800 p-4 rounded-xl focus:outline-none focus:border-neutral-500 transition"
+              />
+              <input
+                placeholder="Shipping Address (UAE City / Area)"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="w-full bg-black border border-neutral-800 p-4 rounded-xl focus:outline-none focus:border-neutral-500 transition"
+              />
             </div>
-          ))}
+
+            <button
+              onClick={placeOrder}
+              className="w-full bg-white text-black py-4 rounded-xl mt-8 font-bold text-lg hover:bg-neutral-200 transition shadow-lg"
+            >
+              Complete Order
+            </button>
+
+            <button
+              onClick={() => setShowCheckout(false)}
+              className="w-full mt-4 text-neutral-500 hover:text-white text-sm uppercase tracking-widest transition"
+            >
+              Back to Shop
+            </button>
+          </div>
         </div>
+      )}
 
-        {/* Total */}
-        <div className="flex justify-between items-center mt-8 text-xl font-medium">
-          <span>Total</span>
-          <span>${total}</span>
-        </div>
-
-        {/* Checkout Button */}
-        <button
-          onClick={handleCheckout}
-          className="mt-8 w-full bg-gradient-to-r from-black to-gray-800 text-white py-4 rounded-xl text-lg hover:opacity-90 transition"
-        >
-          Proceed to Checkout
-        </button>
-      </>
-    )}
-  </div>
-</section>
-
-  {/* Checkout Modal */}
-{showCheckout && (
-  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-
-    <div className="bg-neutral-900 text-white p-8 rounded-2xl w-full max-w-md shadow-2xl">
-
-      <h2 className="text-2xl font-semibold mb-6 text-center">
-        Checkout
-      </h2>
-
-      {/* Inputs */}
-      <input
-  placeholder="Full Name"
-  value={name}
-  onChange={(e) => setName(e.target.value)}
-  className="w-full border p-2 mb-3"
-/>
-
-<input
-  placeholder="Email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  className="w-full border p-2 mb-3"
-/>
-
-<input
-  placeholder="Address (UAE)"
-  value={address}
-  onChange={(e) => setAddress(e.target.value)}
-  className="w-full border p-2 mb-3"
-/> 
-      
-      {/* Complete Purchase */}
-      <button
-  onClick={placeOrder}
-  className="w-full bg-black text-white py-3 rounded-lg mt-4"
->
-  Pay with Card (Stripe)
-</button>
-
-      {/* Close Button */}
-      <button
-        onClick={() => setShowCheckout(false)}
-        className="w-full mt-3 text-neutral-400 hover:text-white text-sm"
-      >
-        Cancel
-      </button>
-
-    </div>
-  </div>
-)}
+      {/* Footer */}
+      <footer className="py-10 text-center text-neutral-600 text-xs border-t border-neutral-900 mt-20">
+        © 2026 GHANA LUXE | PREMIUM AFRICAN GOODS
+      </footer>
+    </main>
+  );
+}
