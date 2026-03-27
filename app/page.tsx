@@ -13,6 +13,23 @@ const removeFromCart = (index: number) => { setCart(cart.filter((_, i) => i !== 
 const total = cart.reduce((sum, item) => sum + item.price, 0);
 
 const handleCheckout = () => { setShowCheckout(true); };
+ const placeOrder = async () => {
+  try {
+    await addDoc(collection(db, "orders"), {
+      items: cart,
+      total,
+      createdAt: new Date(),
+    });
+
+    setCart([]);
+    setShowCheckout(false);
+
+    alert("✅ Order saved!");
+  } catch (error) {
+    console.error(error);
+    alert("❌ Error saving order");
+  }
+};                               
 
 return ( <main className="min-h-screen bg-neutral-950 text-white"> {/* Navbar */} <nav className="flex justify-between items-center px-10 py-6 border-b border-neutral-800"> <h1 className="text-2xl font-semibold tracking-widest">GHANA LUXE</h1> <div className="flex gap-6 text-sm opacity-80"> <span>Home</span> <span>Shop</span> <span>Contact</span> </div> </nav>
 
@@ -87,8 +104,11 @@ return ( <main className="min-h-screen bg-neutral-950 text-white"> {/* Navbar */
         <input placeholder="Address (UAE)" className="w-full border p-2 mb-3" />
 
         <button
-          onClick={() => {
-            alert("Redirecting to payment...");
+  onClick={placeOrder}
+  className="w-full bg-gradient-to-r from-black to-gray-800 text-white py-3 rounded-xl mt-4 hover:opacity-90 transition"
+>
+  Complete Purchase
+</button>
             window.location.href = "https://buy.stripe.com/test";
           }}
           className="w-full bg-black text-white py-3 rounded-lg mt-4"
