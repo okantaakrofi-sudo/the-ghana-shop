@@ -59,7 +59,7 @@ export default function Home() {
       
       // 3. Optional: Redirect to WhatsApp automatically
       const whatsappMsg = `Hi Ghana Luxe! I've placed an order (#${docRef.id.slice(0,5)}). Total: AED ${total}. Name: ${name}.`;
-      window.open(`https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+      window.open(`https://wa.me/971568394640?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
 
       alert("Order placed! We will contact you soon.");
 
