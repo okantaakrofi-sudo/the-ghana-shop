@@ -25,55 +25,40 @@ export default function Home() {
     setCart(cart.filter((_, i) => i !== index));
   };
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const [loading, setLoading] = useState(false); // Add this at the top with your other states
 
-  const handleCheckout = () => {
-    setShowCheckout(true);
-  };
+const placeOrder = async () => {
+  if (!name || !email || !address) {
+    alert("Please fill in all details.");
+    return;
+  }
 
-  const placeOrder = async () => {
-    // 1. Validation check
-    if (!name || !email || !address) {
-      alert("Please fill in all the details so we can process your order.");
-      return;
-    }
+  setLoading(true); // Disable the button while it works
+  try {
+    const docRef = await addDoc(collection(db, "orders"), {
+      customerName: name,
+      customerEmail: email,
+      customerAddress: address,
+      items: cart,
+      totalAmount: total,
+      status: "pending",
+      orderDate: new Date().toISOString(),
+    });
 
-    if (cart.length === 0) {
-      alert("Your cart is empty!");
-      return;
-    }
+    alert("Order Successful! Opening WhatsApp...");
+    
+    const message = `New Order from ${name}! Total: AED ${total}. Items: ${cart.map(i => i.name).join(", ")}`;
+    window.open(`https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(message)}`, '_blank');
 
-    try {
-      // 2. Save to Firestore
-      const docRef = await addDoc(collection(db, "orders"), {
-        customerName: name,
-        customerEmail: email,
-        customerAddress: address,
-        items: cart,
-        totalAmount: total,
-        status: "pending",
-        orderDate: new Date().toISOString(),
-      });
-
-      console.log("Order ID: ", docRef.id);
-      
-      // 3. Optional: Redirect to WhatsApp automatically
-      const whatsappMsg = `Hi Ghana Luxe! I've placed an order (#${docRef.id.slice(0,5)}). Total: AED ${total}. Name: ${name}.`;
-      window.open(`https://wa.me/971568394640?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-
-      alert("Order placed! We will contact you soon.");
-
-      // 4. Reset
-      setCart([]);
-      setName("");
-      setEmail("");
-      setAddress("");
-      setShowCheckout(false);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      alert("Error placing order. Please check your connection.");
-    }
-  };
+    setCart([]);
+    setShowCheckout(false);
+  } catch (e) {
+    console.error("Order Error:", e);
+    alert("Database Error: Check your Firebase Rules or API keys.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <main className="min-h-screen bg-black text-white font-sans">
