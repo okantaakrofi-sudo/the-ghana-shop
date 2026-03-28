@@ -48,7 +48,7 @@ const placeOrder = async () => {
     alert("Order Successful! Opening WhatsApp...");
     
     const message = `New Order from ${name}! Total: AED ${total}. Items: ${cart.map(i => i.name).join(", ")}`;
-    window.open(`https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/971568394640?text=${encodeURIComponent(message)}`, '_blank');
 
     setCart([]);
     setShowCheckout(false);
