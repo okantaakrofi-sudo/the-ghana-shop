@@ -10,7 +10,7 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
-// This "getApps" check prevents the app from initializing twice during Vercel builds
+// Initialize Firebase only once
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
