@@ -176,11 +176,14 @@ const placeOrder = async () => {
             </div>
 
             <button
-              onClick={placeOrder}
-              className="w-full bg-white text-black py-4 rounded-xl mt-8 font-bold text-lg hover:bg-neutral-200 transition shadow-lg"
-            >
-              Complete Order
-            </button>
+  onClick={placeOrder}
+  disabled={loading}
+  className={`w-full py-4 rounded-xl font-bold mt-4 transition ${
+    loading ? "bg-neutral-700 cursor-not-allowed" : "bg-white text-black hover:bg-neutral-200"
+  }`}
+>
+  {loading ? "Processing Order..." : "Complete Order"}
+</button>
 
             <button
               onClick={() => setShowCheckout(false)}
