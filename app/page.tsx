@@ -13,9 +13,9 @@ interface Product {
 }
 
 const products: Product[] = [
-  { id: 1, name: "Kente Cloth", price: 120, image: "https://images.unsplash.com/photo-1603252109303-2751441dd157" },
-  { id: 2, name: "Shea Butter", price: 25, image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e" },
-  { id: 3, name: "African Print Shirt", price: 60, image: "https://images.unsplash.com/photo-1520975922284-9e0ce827c0b1" },
+  { id: 1, name: "Enhanced Hair Tea", price: 65, image: "https://imgur.com/a/FYqMhGY" },
+  { id: 2, name: "Mama Ghana Hair Oil", price: 70, image: "https://imgur.com/a/XrA5iGH" },
+  { id: 3, name: "Yellow Shea Oil", price: 80, image: "https://imgur.com/a/NU7Vn8E" },
 ];
 
 export default function Home() {
@@ -73,7 +73,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white p-4 md:p-10">
       <nav className="flex justify-between items-center mb-10 border-b border-neutral-800 pb-6">
-        <h1 className="text-2xl font-bold tracking-tighter">GHANA LUXE</h1>
+        <h1 className="text-2xl font-bold tracking-tighter">THE GHANA SHOP</h1>
         <div className="text-sm opacity-70">Cart ({cart.length})</div>
       </nav>
 
