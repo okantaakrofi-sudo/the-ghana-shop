@@ -31,13 +31,18 @@ export default function Home() {
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   const placeOrder = async () => {
-    if (!name || !email || !address) {
-      alert("Please fill in all details.");
-      return;
-    }
-
-    setLoading(true);
-    try {
+  console.log("Button clicked!"); // Check your browser console for this
+  if (!name || !email || !address) {
+    alert("Please fill in details");
+    return;
+  }
+  setLoading(true);
+  
+  // Test alert to see if we even get this far
+  alert("Attempting to connect to Firebase..."); 
+  
+  try {
+    // ... rest of your code
       const docRef = await addDoc(collection(db, "orders"), {
         customerName: name,
         customerEmail: email,
