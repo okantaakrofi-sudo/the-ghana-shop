@@ -23,7 +23,7 @@ const products: Product[] = [
     id: 2, 
     name: "Mama Ghana Hair Oil", 
     price: 70, 
-    image: "https://drive.google.com/uc?export=view&id=XrA5iGH" 
+    image: "https://drive.google.com/uc?export=view&id=IMG_20260324_123756729.jpg" 
   },
   { 
     id: 3, 
