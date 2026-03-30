@@ -5,29 +5,26 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 export default function Dashboard() {
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const snapshot = await getDocs(collection(db, "products"));
-      setProducts(snapshot.docs.map(doc => doc.data()));
+    const load = async () => {
+      const snap = await getDocs(collection(db, "orders"));
+      setOrders(snap.docs.map((doc) => doc.data()));
     };
 
-    fetchProducts();
+    load();
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+    <main className="p-6 bg-black text-white min-h-screen">
+      <h1 className="text-2xl mb-6">📊 Orders</h1>
 
-      <div className="grid gap-4">
-        {products.map((p: any, i) => (
-          <div key={i} className="card flex justify-between">
-            <span>{p.name}</span>
-            <span>AED {p.price}</span>
-          </div>
-        ))}
-      </div>
+      {orders.map((o, i) => (
+        <div key={i} className="bg-neutral-900 p-4 mb-3 rounded">
+          <p>Amount: AED {o.amount}</p>
+        </div>
+      ))}
     </main>
   );
 }
