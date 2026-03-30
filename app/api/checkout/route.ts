@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     line_items,
     mode: "payment",
     success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
-    cancel_url: `${process.env.NEXT_PUBLIC_URL}/`,
+    cancel_url: `${process.env.NEXT_PUBLIC_URL}`,
   });
 
   return NextResponse.json({ url: session.url });
