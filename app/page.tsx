@@ -17,19 +17,19 @@ const products: Product[] = [
     id: 1, 
     name: "Enhanced Hair Tea", 
     price: 65, 
-    image: "https://drive.google.com/uc?export=view&id=1FqFcwpRN2K04zYn1EUxaRQsGPJ1fKg-z" 
+    image: "https://drive.google.com/uc?export=view&id=1FqFcwpRN2K04zYn1EUxaRQsGPJ1fKg-z"
   },
   { 
     id: 2, 
     name: "Mama Ghana Hair Oil", 
     price: 70, 
-    image: "https://drive.google.com/uc?export=view&id=1gYhineBQiJS_WLS3ZHsi-OdRtnpJ3OlS" 
+    image: "https://drive.google.com/uc?export=view&id=1gYhineBQiJS_WLS3ZHsi-OdRtnpJ3OlS"
   },
   { 
     id: 3, 
     name: "Yellow Shea Oil", 
     price: 80, 
-    image: "https://drive.google.com/uc?export=1ILo90xWeN8eFTLhSVphJdj0u_mG10SwI" 
+    image: "https://drive.google.com/file/d/1ILo90xWeN8eFTLhSVphJdj0u_mG10SwI/view?usp=drive_link"
   }
 ];
 
