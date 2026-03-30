@@ -17,7 +17,7 @@ const products: Product[] = [
     id: 1, 
     name: "Enhanced Hair Tea", 
     price: 65, 
-    image: "https://drive.google.com/uc?export=view&id=FYqMhGY" 
+    image: "https://drive.google.com/uc?export=view&id=1FqFcwpRN2K04zYn1EUxaRQsGPJ1fKg-z" 
   },
   { 
     id: 2, 
@@ -29,7 +29,7 @@ const products: Product[] = [
     id: 3, 
     name: "Yellow Shea Oil", 
     price: 80, 
-    image: "https://drive.google.com/uc?export=view&id=NU7Vn8E" 
+    image: "https://drive.google.com/uc?export=1ILo90xWeN8eFTLhSVphJdj0u_mG10SwI" 
   }
 ];
 
