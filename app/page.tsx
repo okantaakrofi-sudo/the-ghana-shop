@@ -2,81 +2,81 @@
 
 import { useState } from "react";
 
+const products = [
+  {
+    id: 1,
+    name: "Enhanced Hair Tea",
+    price: 65,
+  },
+  {
+    id: 2,
+    name: "Mama Ghana Hair Oil",
+    price: 90,
+  },
+  {
+    id: 3,
+    name: "Yellow Shea Oil",
+    price: 80,
+  },
+];
+
 export default function Home() {
   const [cart, setCart] = useState<any[]>([]);
-
-  const products = [
-    { id: 1, name: "Shea Oil", price: 80 },
-    { id: 2, name: "Black Soap", price: 50 },
-  ];
+  const [success, setSuccess] = useState(false);
 
   const addToCart = (product: any) => {
-    const existing = cart.find((i) => i.id === product.id);
-
-    if (existing) {
-      setCart(
-        cart.map((i) =>
-          i.id === product.id ? { ...i, qty: i.qty + 1 } : i
-        )
-      );
-    } else {
-      setCart([...cart, { ...product, qty: 1 }]);
-    }
+    setCart([...cart, product]);
   };
 
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-
-  const checkout = async () => {
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      body: JSON.stringify({ cart }),
-    });
-
-    const data = await res.json();
-    window.location.href = data.url;
+  const checkout = () => {
+    setSuccess(true);
+    setCart([]);
   };
+
+  if (success) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-black text-white animate-fade-in">
+        <h1 className="text-4xl font-bold mb-4">✅ Order Successful</h1>
+        <button
+          onClick={() => setSuccess(false)}
+          className="bg-white text-black px-6 py-3 rounded-xl"
+        >
+          Back to Shop
+        </button>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-black text-white p-6">
-      <h1 className="text-3xl font-bold mb-6">🛍 Store</h1>
+      <h1 className="text-4xl font-bold mb-6">The Ghana Shop</h1>
 
-      {/* Products */}
-      <div className="grid gap-4 mb-8">
+      <div className="grid md:grid-cols-3 gap-6">
         {products.map((p) => (
-          <div key={p.id} className="p-4 bg-neutral-900 rounded">
-            <h2>{p.name}</h2>
-            <p>AED {p.price}</p>
+          <div
+            key={p.id}
+            className="bg-zinc-900 p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+          >
+            <h2 className="text-xl font-semibold">{p.name}</h2>
+            <p className="text-gray-400 mb-3">AED {p.price}</p>
 
             <button
               onClick={() => addToCart(p)}
-              className="mt-2 bg-white text-black px-4 py-2 rounded"
+              className="bg-white text-black px-4 py-2 rounded-xl w-full"
             >
-              Add
+              Add to Cart
             </button>
           </div>
         ))}
       </div>
 
-      {/* Cart */}
-      <div className="bg-neutral-900 p-4 rounded">
-        <h2 className="mb-3 font-bold">Cart</h2>
-
-        {cart.map((item, i) => (
-          <div key={i} className="flex justify-between">
-            <span>
-              {item.name} x{item.qty}
-            </span>
-            <span>AED {item.price * item.qty}</span>
-          </div>
-        ))}
-
-        <div className="mt-4 font-bold">Total: AED {total}</div>
-
+      <div className="fixed bottom-0 left-0 right-0 bg-zinc-950 p-4 flex justify-between items-center">
+        <span>{cart.length} items</span>
         <button
           onClick={checkout}
-          className="mt-4 w-full bg-white text-black py-2 rounded"
+          className="bg-green-500 px-6 py-2 rounded-xl"
         >
-          Pay Now
+          Checkout
         </button>
       </div>
     </main>
