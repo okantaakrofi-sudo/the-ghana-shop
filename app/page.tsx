@@ -85,126 +85,138 @@ export default function Home() {
     setLoading(false);
   };
 
-  return (
-    <main className="min-h-screen bg-black text-white p-4 md:p-10">
+return (
+  <main className="min-h-screen bg-black text-white px-4 md:px-10 py-6">
 
-      {/* HEADER */}
-      <nav className="flex justify-between items-center mb-10 border-b border-neutral-800 pb-6">
-        <h1 className="text-2xl font-bold tracking-tight">THE GHANA SHOP</h1>
-        <div className="text-sm opacity-70">Cart ({cart.length})</div>
-      </nav>
+    {/* HEADER */}
+    <nav className="flex justify-between items-center mb-10 border-b border-neutral-800 pb-4">
+      <h1 className="text-2xl md:text-3xl font-bold tracking-wide">
+        THE GHANA SHOP
+      </h1>
 
-      {/* PRODUCTS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {products.map((product) => (
+      <div className="bg-white text-black px-4 py-1 rounded-full text-sm font-semibold">
+        Cart ({cart.length})
+      </div>
+    </nav>
+
+    {/* PRODUCT GRID */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      {products.map((product) => (
+        <div
+          key={product.id}
+          className="bg-neutral-900 rounded-2xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+        >
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-60 object-cover"
+          />
+
+          <div className="p-4 space-y-3">
+            <h3 className="text-lg font-semibold">{product.name}</h3>
+
+            <p className="text-neutral-400 text-sm">
+              Premium natural product from Ghana
+            </p>
+
+            <div className="flex justify-between items-center">
+              <span className="text-white font-bold">
+                AED {product.price}
+              </span>
+
+              <button
+                onClick={() => addToCart(product)}
+                className="bg-white text-black px-3 py-1 rounded-lg text-sm font-semibold hover:bg-neutral-200"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    {/* CART SUMMARY */}
+    {cart.length > 0 && (
+      <div className="mt-12 max-w-xl mx-auto bg-neutral-900 p-6 rounded-2xl border border-neutral-800">
+        <h2 className="text-xl font-bold mb-4">Your Cart</h2>
+
+        {cart.map((item, index) => (
           <div
-            key={product.id}
-            className="bg-neutral-900 p-6 rounded-2xl border border-neutral-800"
+            key={index}
+            className="flex justify-between items-center mb-3"
           >
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-48 object-cover rounded-xl mb-4"
-            />
-            <h3 className="text-xl font-bold">{product.name}</h3>
-            <p className="text-neutral-400 mb-4">AED {product.price}</p>
+            <span>{item.name}</span>
 
-            <button
-              onClick={() => addToCart(product)}
-              className="bg-white text-black px-4 py-2 rounded-lg w-full font-semibold"
-            >
-              Add to Cart
-            </button>
+            <div className="flex items-center gap-3">
+              <span>AED {item.price}</span>
+              <button
+                onClick={() => removeFromCart(index)}
+                className="text-red-500 text-sm"
+              >
+                Remove
+              </button>
+            </div>
           </div>
         ))}
+
+        <div className="flex justify-between mt-6 font-bold text-lg">
+          <span>Total</span>
+          <span>AED {total}</span>
+        </div>
+
+        <button
+          onClick={() => setShowCheckout(true)}
+          className="w-full mt-6 bg-white text-black py-3 rounded-xl font-bold hover:bg-neutral-200"
+        >
+          Checkout
+        </button>
       </div>
+    )}
 
-      {/* CART */}
-      {cart.length > 0 && (
-        <div className="mt-10 max-w-xl mx-auto bg-neutral-900 p-6 rounded-2xl border border-neutral-800">
-          <h2 className="text-xl font-bold mb-4">Your Cart</h2>
+    {/* CHECKOUT MODAL */}
+    {showCheckout && (
+      <div className="fixed inset-0 bg-black/80 flex justify-center items-center px-4 z-50">
+        <div className="bg-neutral-900 w-full max-w-md p-6 rounded-2xl border border-neutral-800 space-y-4">
+          <h2 className="text-xl font-bold">Delivery Details</h2>
 
-          {cart.map((item, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center mb-3 border-b border-neutral-800 pb-2"
-            >
-              <span>{item.name}</span>
-              <div className="flex gap-3 items-center">
-                <span>AED {item.price}</span>
-                <button
-                  onClick={() => removeFromCart(index)}
-                  className="text-red-500 text-sm"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ))}
+          <input
+            placeholder="Name"
+            className="w-full p-3 rounded-lg bg-black border border-neutral-700"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-          <div className="flex justify-between mt-4 font-bold">
-            <span>Total</span>
-            <span>AED {total}</span>
-          </div>
+          <input
+            placeholder="Email"
+            className="w-full p-3 rounded-lg bg-black border border-neutral-700"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <input
+            placeholder="Address"
+            className="w-full p-3 rounded-lg bg-black border border-neutral-700"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
 
           <button
-            onClick={() => setShowCheckout(true)}
-            className="w-full bg-white text-black py-3 rounded-xl font-bold mt-6"
+            onClick={placeOrder}
+            disabled={loading}
+            className="w-full bg-white text-black py-3 rounded-xl font-bold"
           >
-            Checkout Now
+            {loading ? "Processing..." : "Complete Order"}
+          </button>
+
+          <button
+            onClick={() => setShowCheckout(false)}
+            className="w-full text-neutral-400 text-sm"
+          >
+            Cancel
           </button>
         </div>
-      )}
-
-      {/* ✅ CHECKOUT MODAL (CORRECT PLACE) */}
-      {showCheckout && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
-          <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-3xl w-full max-w-md">
-
-            <h2 className="text-2xl font-bold mb-6">Delivery Details</h2>
-
-            <div className="space-y-4">
-              <input
-                placeholder="Name"
-                className="w-full bg-black border border-neutral-800 p-3 rounded-lg"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-
-              <input
-                placeholder="Email"
-                className="w-full bg-black border border-neutral-800 p-3 rounded-lg"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-
-              <input
-                placeholder="UAE Address"
-                className="w-full bg-black border border-neutral-800 p-3 rounded-lg"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-
-              <button
-                onClick={placeOrder}
-                disabled={loading}
-                className="w-full bg-white text-black py-3 rounded-xl font-bold"
-              >
-                {loading ? "Processing..." : "Complete Order"}
-              </button>
-
-              <button
-                onClick={() => setShowCheckout(false)}
-                className="w-full text-neutral-500 text-sm mt-2"
-              >
-                Cancel
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
-
-    </main>
-  );
-}
+      </div>
+    )}
+  </main>
+);
