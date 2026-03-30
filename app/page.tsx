@@ -13,9 +13,24 @@ interface Product {
 }
 
 const products: Product[] = [
-  { id: 1, name: "Enhanced Hair Tea", price: 65, image: "https://drive.google.com/uc?export=view&id=XrA5iGH" },
-  { id: 2, name: "Mama Ghana Hair Oil", price: 70, image: "https://imgur.com/a/XrA5iGH" },
-  { id: 3, name: "Yellow Shea Oil", price: 80, image: "https://imgur.com/a/NU7Vn8E" },
+  { 
+    id: 1, 
+    name: "Enhanced Hair Tea", 
+    price: 65, 
+    image: "https://drive.google.com/uc?export=view&id=FYqMhGY" 
+  },
+  { 
+    id: 2, 
+    name: "Mama Ghana Hair Oil", 
+    price: 70, 
+    image: "https://drive.google.com/uc?export=view&id=XrA5iGH" 
+  },
+  { 
+    id: 3, 
+    name: "Yellow Shea Oil", 
+    price: 80, 
+    image: "https://drive.google.com/uc?export=view&id=NU7Vn8E" 
+  }
 ];
 
 export default function Home() {
