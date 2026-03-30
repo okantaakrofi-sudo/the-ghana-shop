@@ -69,8 +69,6 @@ export default function Home() {
         createdAt: new Date(),
       });
 
-      setCart([]);
-      setShowCheckout(false);
       alert("Order placed successfully!");
       setCart([]);
       setShowCheckout(false);
