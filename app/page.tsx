@@ -69,7 +69,7 @@ export default function Home() {
       });
 
       const message = `New Order (#${docRef.id.slice(0,5)}) from ${name}! Total: AED ${total}. Address: ${address}`;
-      window.open(`https://wa.me/971XXXXXXXXX?text=${encodeURIComponent(message)}`, '_blank');
+      window.open(`https://wa.me/971568394640?text=${encodeURIComponent(message)}`, '_blank');
 
       alert("Order successful! Opening WhatsApp...");
       setCart([]);
