@@ -52,79 +52,77 @@ export default function Home() {
 
   // ✅ FIXED FUNCTION (NO JSX INSIDE)
   const placeOrder = async () => {
-    if (!name || !email || !address) {
-      alert("Please fill in details");
-      return;
-    }
+  if (!name || !email || !address) {
+    alert("Please fill all details");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      await addDoc(collection(db, "orders"), {
-        name,
-        email,
-        address,
-        cart,
-        total,
-        createdAt: new Date(),
-      });
+  try {
+    await addDoc(collection(db, "orders"), {
+      name,
+      email,
+      address,
+      cart,
+      total,
+      createdAt: new Date(),
+    });
 
-      alert("Order placed successfully!");
-      setCart([]);
-      setShowCheckout(false);
-      setName("");
-      setEmail("");
-      setAddress("");
-    } catch (error) {
-      console.error(error);
-      alert("Error placing order");
-    }
+    setCart([]);
+    setShowCheckout(false);
+    setOrderSuccess(true);
+  } catch (err) {
+    alert("Error placing order");
+  }
 
-    setLoading(false);
-  };
+  setLoading(false);
+};
 
 return (
-  <main className="min-h-screen bg-black text-white px-4 md:px-10 py-6">
+  <main className="min-h-screen bg-gradient-to-b from-black to-neutral-900 text-white px-4 md:px-12 py-8">
 
     {/* HEADER */}
-    <nav className="flex justify-between items-center mb-10 border-b border-neutral-800 pb-4">
-      <h1 className="text-2xl md:text-3xl font-bold tracking-wide">
+    <nav className="flex justify-between items-center mb-12">
+      <h1 className="text-3xl font-bold tracking-tight">
         THE GHANA SHOP
       </h1>
 
-      <div className="bg-white text-black px-4 py-1 rounded-full text-sm font-semibold">
-        Cart ({cart.length})
+      <div className="relative">
+        <div className="bg-white text-black px-4 py-1 rounded-full text-sm font-semibold">
+          Cart
+        </div>
+        {cart.length > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-xs px-2 py-[2px] rounded-full animate-bounce">
+            {cart.length}
+          </span>
+        )}
       </div>
     </nav>
 
-    {/* PRODUCT GRID */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    {/* PRODUCTS */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
       {products.map((product) => (
         <div
           key={product.id}
-          className="bg-neutral-900 rounded-2xl overflow-hidden shadow-lg hover:scale-[1.02] transition"
+          className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-white/10 transition duration-300"
         >
           <img
             src={product.image}
-            alt={product.name}
-            className="w-full h-60 object-cover"
+            className="w-full h-64 object-cover group-hover:scale-110 transition duration-500"
           />
 
-          <div className="p-4 space-y-3">
+          <div className="p-5 space-y-3">
             <h3 className="text-lg font-semibold">{product.name}</h3>
 
-            <p className="text-neutral-400 text-sm">
-              Premium natural product from Ghana
-            </p>
-
             <div className="flex justify-between items-center">
-              <span className="text-white font-bold">
+              <span className="font-bold">
                 AED {product.price}
               </span>
 
               <button
                 onClick={() => addToCart(product)}
-                className="bg-white text-black px-3 py-1 rounded-lg text-sm font-semibold hover:bg-neutral-200"
+                className="bg-white text-black px-4 py-1.5 rounded-full text-sm hover:scale-105 active:scale-95 transition"
               >
                 Add
               </button>
@@ -134,38 +132,48 @@ return (
       ))}
     </div>
 
-    {/* CART SUMMARY */}
+    {/* CART */}
     {cart.length > 0 && (
-      <div className="mt-12 max-w-xl mx-auto bg-neutral-900 p-6 rounded-2xl border border-neutral-800">
-        <h2 className="text-xl font-bold mb-4">Your Cart</h2>
+      <div className="mt-16 max-w-2xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6">
 
-        {cart.map((item, index) => (
+        <h2 className="text-2xl font-semibold mb-6">Your Cart</h2>
+
+        {cart.map((item) => (
           <div
-            key={index}
-            className="flex justify-between items-center mb-3"
+            key={item.id}
+            className="flex justify-between items-center mb-4 border-b border-white/10 pb-3 animate-fade-in"
           >
             <span>{item.name}</span>
 
             <div className="flex items-center gap-3">
-              <span>AED {item.price}</span>
+
+              {/* QUANTITY CONTROLS */}
+              <div className="flex items-center gap-2 bg-black/40 px-2 py-1 rounded-lg">
+                <button onClick={() => decreaseQty(item.id)}>-</button>
+                <span>{item.quantity}</span>
+                <button onClick={() => increaseQty(item.id)}>+</button>
+              </div>
+
+              <span>AED {item.price * item.quantity}</span>
+
               <button
-                onClick={() => removeFromCart(index)}
-                className="text-red-500 text-sm"
+                onClick={() => removeFromCart(item.id)}
+                className="text-red-400 text-sm"
               >
-                Remove
+                ✕
               </button>
             </div>
           </div>
         ))}
 
-        <div className="flex justify-between mt-6 font-bold text-lg">
+        <div className="flex justify-between mt-6 text-lg font-bold">
           <span>Total</span>
           <span>AED {total}</span>
         </div>
 
         <button
           onClick={() => setShowCheckout(true)}
-          className="w-full mt-6 bg-white text-black py-3 rounded-xl font-bold hover:bg-neutral-200"
+          className="w-full mt-6 bg-white text-black py-3 rounded-2xl font-bold hover:scale-[1.02]"
         >
           Checkout
         </button>
@@ -174,35 +182,36 @@ return (
 
     {/* CHECKOUT MODAL */}
     {showCheckout && (
-      <div className="fixed inset-0 bg-black/80 flex justify-center items-center px-4 z-50">
-        <div className="bg-neutral-900 w-full max-w-md p-6 rounded-2xl border border-neutral-800 space-y-4">
-          <h2 className="text-xl font-bold">Delivery Details</h2>
+      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 px-4 animate-fade-in">
+
+        <div className="bg-white/5 border border-white/10 p-8 rounded-3xl w-full max-w-md space-y-5 animate-scale-in">
+
+          <h2 className="text-2xl font-semibold">Delivery Details</h2>
 
           <input
             placeholder="Name"
-            className="w-full p-3 rounded-lg bg-black border border-neutral-700"
+            className="w-full p-3 rounded-xl bg-black/50 border border-white/10"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <input
             placeholder="Email"
-            className="w-full p-3 rounded-lg bg-black border border-neutral-700"
+            className="w-full p-3 rounded-xl bg-black/50 border border-white/10"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
 
           <input
             placeholder="Address"
-            className="w-full p-3 rounded-lg bg-black border border-neutral-700"
+            className="w-full p-3 rounded-xl bg-black/50 border border-white/10"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
 
           <button
             onClick={placeOrder}
-            disabled={loading}
-            className="w-full bg-white text-black py-3 rounded-xl font-bold"
+            className="w-full bg-white text-black py-3 rounded-2xl font-bold"
           >
             {loading ? "Processing..." : "Complete Order"}
           </button>
@@ -212,6 +221,26 @@ return (
             className="w-full text-neutral-400 text-sm"
           >
             Cancel
+          </button>
+        </div>
+      </div>
+    )}
+
+    {/* SUCCESS SCREEN */}
+    {orderSuccess && (
+      <div className="fixed inset-0 bg-black flex flex-col justify-center items-center z-50 animate-fade-in">
+
+        <div className="text-center space-y-4 animate-scale-in">
+          <h2 className="text-3xl font-bold">✅ Order Confirmed</h2>
+          <p className="text-neutral-400">
+            Thank you for your purchase!
+          </p>
+
+          <button
+            onClick={() => setOrderSuccess(false)}
+            className="mt-4 bg-white text-black px-6 py-2 rounded-full"
+          >
+            Continue Shopping
           </button>
         </div>
       </div>
