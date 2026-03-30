@@ -64,28 +64,22 @@ export default function Home() {
   );
 
   // Place order
-  const placeOrder = async () => {
-    setLoading(true);
+  const phone = "971568394640";
+const message = `New Order 🚀
+Amount: AED ${total}`;
 
-    try {
-      await addDoc(collection(db, "orders"), {
-        name,
-        email,
-        address,
-        cart,
-        total,
-        createdAt: new Date(),
-      });
+window.open(
+  `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+);
+  const handleCheckout = async () => {
+  const res = await fetch("/api/checkout", {
+    method: "POST",
+    body: JSON.stringify({ cart }),
+  });
 
-      setCart([]);
-      setShowCheckout(false);
-      setOrderSuccess(true);
-    } catch (err) {
-      alert("Error placing order");
-    }
-
-    setLoading(false);
-  };
+  const data = await res.json();
+  window.location.href = data.url;
+};
 
   return (
     <main className="min-h-screen bg-black text-white p-6 animate-fade-in">
@@ -205,12 +199,11 @@ export default function Home() {
             </div>
 
             <button
-              onClick={placeOrder}
-              disabled={loading}
-              className="btn-premium w-full mt-5"
-            >
-              {loading ? "Processing..." : "Complete Order"}
-            </button>
+  onClick={handleCheckout}
+  className="btn-premium w-full mt-6"
+>
+  Pay Now
+</button>
 
             <button
               onClick={() => setShowCheckout(false)}
