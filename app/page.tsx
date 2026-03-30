@@ -4,7 +4,6 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useState } from "react";
 
-// Define what a Product looks like so TypeScript is happy
 interface Product {
   id: number;
   name: string;
@@ -53,11 +52,9 @@ export default function Home() {
   }
   setLoading(true);
   
-  // Test alert to see if we even get this far
   alert("Attempting to connect to Firebase..."); 
   
   try {
-    // ... rest of your code
       const docRef = await addDoc(collection(db, "orders"), {
         customerName: name,
         customerEmail: email,
