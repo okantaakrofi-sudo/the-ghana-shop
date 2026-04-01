@@ -1,17 +1,10 @@
-export async function placeOrder(order: any) {
-  console.log("Order placed:", order);
-}
-  try {
-    const res = await fetch("/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(order),
-    });
+import { db } from "./firebase";
+import { collection, addDoc } from "firebase/firestore";
 
-    return await res.json();
+export async function placeOrder(order: any) {
+  try {
+    await addDoc(collection(db, "orders"), order);
   } catch (error) {
-    console.error("Order error:", error);
+    console.error("Error saving order:", error);
   }
 }
