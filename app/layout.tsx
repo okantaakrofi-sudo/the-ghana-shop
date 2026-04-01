@@ -1,21 +1,13 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { CartProvider } from "./context/CartContext";
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Ghana Luxe | Premium African Luxury",
-  description: "Luxury products delivered to UAE & worldwide",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: any) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body>
+        <CartProvider>
+          {children}
+        </CartProvider>
+      </body>
     </html>
   );
 }
