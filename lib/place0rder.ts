@@ -1,15 +1,20 @@
-import { db } from "./firebase";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-
-export const placeOrder = async (order: any) => {
+export async function placeOrder(orderData: any) {
   try {
-    const docRef = await addDoc(collection(db, "orders"), {
-      ...order,
-      createdAt: serverTimestamp(),
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(orderData),
     });
 
-    console.log("Order saved:", docRef.id);
+    if (!res.ok) {
+      throw new Error("Failed to place order");
+    }
+
+    return await res.json();
   } catch (error) {
-    console.error("Error saving order:", error);
+    console.error("Order error:", error);
+    return null;
   }
-};
+}
