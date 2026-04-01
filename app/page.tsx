@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { useCart } from "./context/CartContext";
-import { products } from "@/app/data/products";
+import { useCart } from "../context/CartContext";
+import { products } from "../data/products";
 
 export default function Home() {
   const { cart, total, addToCart } = useCart();
