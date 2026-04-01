@@ -5,32 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@stripe/stripe-js": "^9.0.1",
-    "firebase": "^12.11.0",
-    "next": "^16.1.0-canary.19",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "stripe": "^21.0.1"
-=======
-    "firebase": "^10.8.0",
-    "next": "14.1.0",
-    "react": "^18",
-    "react-dom": "^18"
->>>>>>> 65a2b12c6ec41077f3fb76cd7049b33d47912d76
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^10.1.0",
-    "eslint-config-next": "^0.2.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "stripe": "^14.0.0",
+    "@stripe/stripe-js": "^2.0.0"
   }
 }
