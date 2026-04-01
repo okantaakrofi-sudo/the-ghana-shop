@@ -1,20 +1,15 @@
-export async function placeOrder(orderData: any) {
+export async function placeOrder(order: any) {
   try {
     const res = await fetch("/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify(order),
     });
-
-    if (!res.ok) {
-      throw new Error("Failed to place order");
-    }
 
     return await res.json();
   } catch (error) {
     console.error("Order error:", error);
-    return null;
   }
 }
