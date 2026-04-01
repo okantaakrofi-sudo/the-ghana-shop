@@ -1,82 +1,144 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
-
-const products = [
-  {
-    id: 1,
-    name: "Enhanced Hair Tea",
-    price: 65,
-  },
-  {
-    id: 2,
-    name: "Mama Ghana Hair Oil",
-    price: 90,
-  },
-  {
-    id: 3,
-    name: "Yellow Shea Oil",
-    price: 80,
-  },
-];
+import { useCart } from "./context/CartContext";
+import { products } from "./data/products";
 
 export default function Home() {
-  const [cart, setCart] = useState<any[]>([]);
-  const [success, setSuccess] = useState(false);
+  const { cart, total, addToCart } = useCart();
 
-  const addToCart = (product: any) => {
-    setCart([...cart, product]);
+  const [customer, setCustomer] = useState({
+    name: "",
+    phone: "",
+    address: "",
+  });
+
+  const validateCustomer = () => {
+    if (!customer.name || !customer.phone || !customer.address) {
+      alert("Please fill all delivery details");
+      return false;
+    }
+    return true;
   };
 
-  const checkout = () => {
-    setSuccess(true);
-    setCart([]);
+  const checkout = async () => {
+    if (!validateCustomer()) return;
+
+    localStorage.setItem("customer", JSON.stringify(customer));
+
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      body: JSON.stringify({ cart, customer }),
+    });
+
+    const data = await res.json();
+    window.location.href = data.url;
   };
 
-  if (success) {
-    return (
-      <div className="h-screen flex flex-col items-center justify-center bg-black text-white animate-fade-in">
-        <h1 className="text-4xl font-bold mb-4">✅ Order Successful</h1>
-        <button
-          onClick={() => setSuccess(false)}
-          className="bg-white text-black px-6 py-3 rounded-xl"
-        >
-          Back to Shop
-        </button>
-      </div>
-    );
-  }
+  const placeCODOrder = async () => {
+    if (!validateCustomer()) return;
+
+    alert("Order placed! Pay cash on delivery 🚚");
+  };
 
   return (
-    <main className="min-h-screen bg-black text-white p-6">
-      <h1 className="text-4xl font-bold mb-6">The Ghana Shop</h1>
+    <main className="bg-black text-white min-h-screen">
+      {/* HERO */}
+      <section className="text-center py-20 px-6">
+        <h1 className="text-5xl font-bold mb-4 tracking-tight">
+          Luxury Ghana Beauty
+        </h1>
+        <p className="text-gray-400 mb-6">
+          Premium Natural Hair & Skin Care
+        </p>
+        <button className="bg-white text-black px-8 py-3 rounded-full hover:scale-105 transition">
+          Shop Now
+        </button>
+      </section>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      {/* PRODUCTS */}
+      <section className="grid md:grid-cols-3 gap-6 p-6">
         {products.map((p) => (
           <div
             key={p.id}
-            className="bg-zinc-900 p-4 rounded-2xl shadow-lg hover:scale-105 transition"
+            className="bg-zinc-900 rounded-2xl p-4 hover:scale-105 transition"
           >
-            <h2 className="text-xl font-semibold">{p.name}</h2>
-            <p className="text-gray-400 mb-3">AED {p.price}</p>
+            <div className="relative w-full h-48 mb-4">
+              <Image
+                src={p.image}
+                alt={p.name}
+                fill
+                className="object-cover rounded-xl"
+              />
+            </div>
+
+            <h2 className="text-lg font-semibold">{p.name}</h2>
+            <p className="text-gray-400">AED {p.price}</p>
 
             <button
               onClick={() => addToCart(p)}
-              className="bg-white text-black px-4 py-2 rounded-xl w-full"
+              className="mt-3 w-full bg-white text-black py-2 rounded-xl"
             >
               Add to Cart
             </button>
           </div>
         ))}
-      </div>
+      </section>
 
-      <div className="fixed bottom-0 left-0 right-0 bg-zinc-950 p-4 flex justify-between items-center">
-        <span>{cart.length} items</span>
+      {/* CUSTOMER FORM */}
+      <section className="p-6">
+        <div className="bg-white text-black p-6 rounded-2xl max-w-xl mx-auto space-y-4">
+          <h2 className="text-xl font-bold">Delivery Details</h2>
+
+          <input
+            placeholder="Full Name"
+            className="w-full border p-3 rounded"
+            value={customer.name}
+            onChange={(e) =>
+              setCustomer({ ...customer, name: e.target.value })
+            }
+          />
+
+          <input
+            placeholder="Phone Number"
+            className="w-full border p-3 rounded"
+            value={customer.phone}
+            onChange={(e) =>
+              setCustomer({ ...customer, phone: e.target.value })
+            }
+          />
+
+          <input
+            placeholder="Delivery Address"
+            className="w-full border p-3 rounded"
+            value={customer.address}
+            onChange={(e) =>
+              setCustomer({ ...customer, address: e.target.value })
+            }
+          />
+        </div>
+      </section>
+
+      {/* CART BAR */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 p-4 space-y-3">
+        <div className="flex justify-between text-sm">
+          <span>{cart.length} items</span>
+          <span>AED {total}</span>
+        </div>
+
         <button
           onClick={checkout}
-          className="bg-green-500 px-6 py-2 rounded-xl"
+          className="w-full bg-white text-black py-3 rounded-xl"
         >
-          Checkout
+          Pay (Card / Apple Pay / Google Pay)
+        </button>
+
+        <button
+          onClick={placeCODOrder}
+          className="w-full bg-green-500 py-3 rounded-xl"
+        >
+          Cash on Delivery
         </button>
       </div>
     </main>
