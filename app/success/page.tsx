@@ -1,15 +1,26 @@
-export default function Success() {
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-black text-white">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold mb-3">
-          🎉 Payment Successful
-        </h1>
+"use client";
 
-        <a href="/" className="bg-white text-black px-6 py-2 rounded">
-          Back to Store
-        </a>
-      </div>
-    </main>
+import { useEffect } from "react";
+import { placeOrder } from "@/lib/placeOrder";
+import { useCart } from "@/app/context/CartContext";
+
+export default function SuccessPage() {
+  const { cart, total } = useCart();
+
+  useEffect(() => {
+    placeOrder({
+      cart,
+      total,
+      paymentMethod: "Stripe",
+      status: "paid",
+    });
+  }, []);
+
+  return (
+    <div className="h-screen flex items-center justify-center">
+      <h1 className="text-2xl font-bold">
+        ✅ Payment Successful!
+      </h1>
+    </div>
   );
 }
