@@ -1,4 +1,6 @@
 export async function placeOrder(order: any) {
+  console.log("Order placed:", order);
+}
   try {
     const res = await fetch("/api/orders", {
       method: "POST",
