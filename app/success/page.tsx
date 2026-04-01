@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { placeOrder } from "../../lib/placeOrder";
+import { placeOrder } from "../../lib/place0rder";
 import { useCart } from "../context/CartContext";
 
 export default function SuccessPage() {
