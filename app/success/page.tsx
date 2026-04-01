@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { placeOrder } from "@/lib/placeOrder";
-import { useCart } from "@/app/context/CartContext";
+import { useCart } from "../context/CartContext";
 
 export default function SuccessPage() {
   const { cart, total } = useCart();
