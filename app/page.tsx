@@ -58,9 +58,9 @@ export default function Home() {
           Shop Now
         </button>
       </section>
-id="products" 
+
       {/* PRODUCTS */}
-      <section className="grid md:grid-cols-3 gap-6 p-6">
+      <section id="products" className="grid md:grid-cols-3 gap-6 p-6">
         {products.map((p) => (
           <div
             key={p.id}
