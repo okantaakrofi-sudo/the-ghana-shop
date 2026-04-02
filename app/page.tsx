@@ -6,7 +6,7 @@ import { useCart } from "./context/CartContext";
 import { products } from "../data/products";
 
 export default function Home() {
-  const { cart, total, addToCart } = useCart();
+  const { cart, total, addToCart } = useCart() || { cart: [], total: 0, addToCart: () => {} };
 
   const [customer, setCustomer] = useState({
     name: "",
@@ -52,11 +52,13 @@ export default function Home() {
         <p className="text-gray-400 mb-6">
           Premium Natural Hair & Skin Care
         </p>
-        <button className="bg-white text-black px-8 py-3 rounded-full hover:scale-105 transition">
+        <button 
+          onClick={() => document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" })}
+          className="bg-white text-black px-8 py-3 rounded-full hover:scale-105 transition">
           Shop Now
         </button>
       </section>
-
+id="products" 
       {/* PRODUCTS */}
       <section className="grid md:grid-cols-3 gap-6 p-6">
         {products.map((p) => (
