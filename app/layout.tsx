@@ -4,8 +4,8 @@ import { CartProvider } from "./context/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Luxury Beauty Store - Premium Cosmetics & Skincare in UAE",
-  description: "Premium beauty and skincare products. Shop 24K gold masks, argan serums, and luxury cosmetics in UAE.",
+  title: "The Ghana Shop - The Balm of Gilead - Premium Beauty & Cosmetics",
+  description: "The Ghana Shop. The Balm of Gilead. Discover premium beauty and skincare products - luxury cosmetics, serums, masks, and more.",
 };
 
 export default function RootLayout({

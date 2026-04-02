@@ -1,7 +1,7 @@
 {
-  "name": "uae-beauty-store",
+  "name": "the-ghana-shop",
   "version": "1.0.0",
-  "description": "Premium Beauty & Cosmetics E-Commerce Store for UAE",
+  "description": "The Ghana Shop - Premium Beauty & Cosmetics. The Balm of Gilead.",
   "private": true,
   "scripts": {
     "dev": "next dev",

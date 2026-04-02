@@ -27,7 +27,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition group cursor-pointer">
       {/* IMAGE */}
-      <div className="relative h-64 bg-gray-100 overflow-hidden">
+      <div className="relative h-64 bg-gradient-to-br from-amber-100 to-rose-100 overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}

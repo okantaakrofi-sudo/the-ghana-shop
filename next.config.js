@@ -4,6 +4,9 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+  images: {
+    unoptimized: process.env.NODE_ENV === "development",
+  },
 };
 
 module.exports = nextConfig;

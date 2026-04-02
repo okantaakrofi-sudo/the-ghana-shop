@@ -28,9 +28,12 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-          <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-amber-900 via-rose-700 to-amber-900 bg-clip-text text-transparent">
-            Luxury Beauty Redefined
+          <h1 className="text-6xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-amber-900 via-rose-700 to-amber-900 bg-clip-text text-transparent">
+            The Ghana Shop
           </h1>
+          <p className="text-3xl md:text-4xl font-semibold text-amber-700 mb-6 italic">
+            The Balm of Gilead
+          </p>
           <p className="text-xl md:text-2xl text-gray-600 mb-8">
             Discover premium skincare & cosmetics crafted for perfection
           </p>
