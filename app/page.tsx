@@ -1,155 +1,165 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { products } from "@/data/products";
+import Header from "@/components/Header";
+import ProductCard from "@/components/ProductCard";
 import { useState } from "react";
-import { useCart } from "./context/CartContext";
-import { products } from "../data/products";
 
 export default function Home() {
-  const { cart, total, addToCart } = useCart() || { cart: [], total: 0, addToCart: () => {} };
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const categories = ["All", "Serums", "Masks", "Moisturizers", "Essences", "Exfoliants", "Eye Care"];
 
-  const [customer, setCustomer] = useState({
-    name: "",
-    phone: "",
-    address: "",
-  });
-
-  const validateCustomer = () => {
-    if (!customer.name || !customer.phone || !customer.address) {
-      alert("Please fill all delivery details");
-      return false;
-    }
-    return true;
-  };
-
-  const checkout = async () => {
-    if (!validateCustomer()) return;
-
-    localStorage.setItem("customer", JSON.stringify(customer));
-
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      body: JSON.stringify({ cart, customer }),
-    });
-
-    const data = await res.json();
-    window.location.href = data.url;
-  };
-
-  const placeCODOrder = async () => {
-    if (!validateCustomer()) return;
-
-    alert("Order placed! Pay cash on delivery 🚚");
-  };
+  const filteredProducts =
+    selectedCategory === "All"
+      ? products
+      : products.filter((p) => p.category === selectedCategory);
 
   return (
-    <main className="bg-black text-white min-h-screen pb-48">
-      {/* HERO */}
-      <section className="text-center py-20 px-6">
-        <h1 className="text-5xl font-bold mb-4 tracking-tight">
-          Luxury Ghana Beauty
-        </h1>
-        <p className="text-gray-400 mb-6">
-          Premium Natural Hair & Skin Care
-        </p>
-        <button 
-          onClick={() => document.querySelector("#products")?.scrollIntoView({ behavior: "smooth" })}
-          className="bg-white text-black px-8 py-3 rounded-full hover:scale-105 transition font-semibold">
-          Shop Now
-        </button>
-      </section>
+    <main className="min-h-screen bg-white">
+      <Header />
 
-      {/* PRODUCTS */}
-      <section id="products" className="grid md:grid-cols-3 gap-6 p-6 max-w-6xl mx-auto">
-        {products.map((p) => (
-          <div
-            key={p.id}
-            className="bg-zinc-900 rounded-2xl p-4 hover:scale-105 transition cursor-pointer"
-          >
-            <div className="relative w-full h-48 mb-4 bg-zinc-800 rounded-xl overflow-hidden">
-              <Image
-                src={p.image}
-                alt={p.name}
-                fill
-                className="object-cover rounded-xl"
-              />
-            </div>
+      {/* HERO SECTION */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-amber-50 via-white to-rose-50">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-20 left-10 w-72 h-72 bg-amber-200 rounded-full mix-blend-multiply filter blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-72 h-72 bg-rose-200 rounded-full mix-blend-multiply filter blur-3xl"></div>
+        </div>
 
-            <h2 className="text-lg font-semibold">{p.name}</h2>
-            <p className="text-gray-400">AED {p.price}</p>
-
-            <button
-              onClick={() => addToCart(p)}
-              className="mt-3 w-full bg-white text-black py-2 rounded-xl hover:bg-gray-200 transition font-semibold"
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+          <h1 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-amber-900 via-rose-700 to-amber-900 bg-clip-text text-transparent">
+            Luxury Beauty Redefined
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-600 mb-8">
+            Discover premium skincare & cosmetics crafted for perfection
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Link
+              href="#products"
+              className="bg-gradient-to-r from-amber-600 to-rose-600 text-white px-8 py-4 rounded-full hover:shadow-lg transition text-lg font-semibold"
             >
-              Add to Cart
-            </button>
+              Shop Collection
+            </Link>
+            <Link
+              href="#"
+              className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-full hover:border-gray-400 transition text-lg font-semibold"
+            >
+              Learn More
+            </Link>
           </div>
-        ))}
-      </section>
-
-      {/* CUSTOMER FORM */}
-      <section className="p-6">
-        <div className="bg-white text-black p-6 rounded-2xl max-w-md mx-auto space-y-4">
-          <h2 className="text-xl font-bold mb-4">Delivery Details</h2>
-
-          <input
-            placeholder="Full Name"
-            type="text"
-            className="w-full border border-gray-300 p-3 rounded bg-white text-black"
-            value={customer.name}
-            onChange={(e) =>
-              setCustomer({ ...customer, name: e.target.value })
-            }
-          />
-
-          <input
-            placeholder="Phone Number"
-            type="tel"
-            className="w-full border border-gray-300 p-3 rounded bg-white text-black"
-            value={customer.phone}
-            onChange={(e) =>
-              setCustomer({ ...customer, phone: e.target.value })
-            }
-          />
-
-          <input
-            placeholder="Delivery Address"
-            type="text"
-            className="w-full border border-gray-300 p-3 rounded bg-white text-black"
-            value={customer.address}
-            onChange={(e) =>
-              setCustomer({ ...customer, address: e.target.value })
-            }
-          />
         </div>
       </section>
 
-      {/* CART BAR */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 p-4 space-y-3 z-50">
+      {/* FEATURES */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
+          <div className="text-center">
+            <div className="text-4xl mb-4">✨</div>
+            <h3 className="text-lg font-semibold mb-2">Premium Quality</h3>
+            <p className="text-gray-600">100% authentic luxury products</p>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl mb-4">🚚</div>
+            <h3 className="text-lg font-semibold mb-2">Fast Delivery</h3>
+            <p className="text-gray-600">Free delivery on orders over AED 200</p>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl mb-4">🛡️</div>
+            <h3 className="text-lg font-semibold mb-2">Guaranteed Safe</h3>
+            <p className="text-gray-600">Secure payment & authenticity verified</p>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl mb-4">💝</div>
+            <h3 className="text-lg font-semibold mb-2">Gift Ready</h3>
+            <p className="text-gray-600">Beautiful packaging included</p>
+          </div>
+        </div>
+      </section>
+
+      {/* PRODUCTS SECTION */}
+      <section id="products" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-between text-lg font-bold mb-3">
-            <span>{cart.length} items</span>
-            <span>AED {total}</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+            Curated Collection
+          </h2>
+          <p className="text-center text-gray-600 mb-12 text-lg">
+            Handpicked luxury products for the discerning customer
+          </p>
+
+          {/* CATEGORY FILTER */}
+          <div className="flex gap-2 mb-12 justify-center flex-wrap">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-6 py-2 rounded-full transition ${
+                  selectedCategory === cat
+                    ? "bg-gradient-to-r from-amber-600 to-rose-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
 
-          <button
-            onClick={checkout}
-            disabled={cart.length === 0}
-            className="w-full bg-white text-black py-3 rounded-xl hover:bg-gray-200 transition font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            💳 Pay (Card / Apple Pay / Google Pay)
-          </button>
+          {/* PRODUCTS GRID */}
+          <div className="grid md:grid-cols-3 gap-8">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <button
-            onClick={placeCODOrder}
-            disabled={cart.length === 0}
-            className="w-full bg-green-600 text-white py-3 rounded-xl hover:bg-green-700 transition font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            🚚 Cash on Delivery
+      {/* CTA SECTION */}
+      <section className="py-20 px-6 bg-gradient-to-r from-amber-900 to-rose-900 text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-4">Exclusive VIP Membership</h2>
+          <p className="text-lg mb-8 opacity-90">
+            Join our VIP club and get early access to new products, exclusive discounts, and personalized beauty consultations
+          </p>
+          <button className="bg-white text-amber-900 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+            Become VIP Member
           </button>
         </div>
-      </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="bg-gray-900 text-white py-12 px-6">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <h4 className="font-semibold mb-4">About Us</h4>
+            <p className="text-gray-400 text-sm">Premium luxury beauty store for UAE</p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Customer Service</h4>
+            <ul className="text-gray-400 text-sm space-y-2">
+              <li><Link href="#" className="hover:text-white">Contact Us</Link></li>
+              <li><Link href="#" className="hover:text-white">FAQ</Link></li>
+              <li><Link href="#" className="hover:text-white">Shipping</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Policies</h4>
+            <ul className="text-gray-400 text-sm space-y-2">
+              <li><Link href="#" className="hover:text-white">Privacy</Link></li>
+              <li><Link href="#" className="hover:text-white">Terms</Link></li>
+              <li><Link href="#" className="hover:text-white">Returns</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-4">Contact</h4>
+            <p className="text-gray-400 text-sm">Dubai, UAE</p>
+            <p className="text-gray-400 text-sm">+971 XXXX XXXX</p>
+            <p className="text-gray-400 text-sm">support@luxurybeauty.ae</p>
+          </div>
+        </div>
+        <div className="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm">
+          <p>&copy; 2024 Luxury Beauty Store. All rights reserved.</p>
+        </div>
+      </footer>
     </main>
   );
 }
