@@ -5,6 +5,16 @@ const nextConfig = {
     root: __dirname,
   },
   images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.unsplash.com",
+      },
+    ],
     unoptimized: process.env.NODE_ENV === "development",
   },
 };

@@ -33,6 +33,10 @@ export default function ProductCard({ product }: ProductCardProps) {
           alt={product.name}
           fill
           className="object-cover group-hover:scale-110 transition duration-300"
+          onError={(e) => {
+            const img = e.target as HTMLImageElement;
+            img.src = "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500&h=500&fit=crop";
+          }}
         />
         {discount > 0 && (
           <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
