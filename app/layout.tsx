@@ -5,10 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "The Ghana Shop | Natural Hair & Skin Care UAE",
-  description: "Authentic Ghanaian-inspired care.",
+  // ... rest of metadata
   icons: {
-    icon: "/icon.svg", // This points to the file you just made
+    icon: "/icon.svg",
   },
 };
 
