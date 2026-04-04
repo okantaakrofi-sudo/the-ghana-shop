@@ -1,29 +1,25 @@
-import Stripe from "stripe";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { items, customerEmail, totalAmount } = body;
 
-export async function POST(req: Request) {
-  const { cart } = await req.json();
+    // 1. Here you would normally connect to a database (like Supabase or MongoDB)
+    // to save the order for The Ghana Shop records.
+    console.log("New Order Received for:", customerEmail);
+    console.log("Total Amount:", totalAmount, "AED");
 
-  const line_items = cart.map((item: any) => ({
-    price_data: {
-      currency: "aed",
-      product_data: {
-        name: item.name,
-      },
-      unit_amount: item.price * 100,
-    },
-    quantity: item.qty,
-  }));
+    // 2. Integration: You could trigger an email to yourself here 
+    // to notify you of the new 150 AED Hair Oil sale.
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items,
-    mode: "payment",
-    success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
-    cancel_url: `${process.env.NEXT_PUBLIC_URL}`,
-  });
+    return NextResponse.json({ 
+      success: true, 
+      message: "Order initiated",
+      orderId: `GH-${Math.floor(Math.random() * 10000)}` 
+    });
 
-  return NextResponse.json({ url: session.url });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: "Checkout failed" }, { status: 500 });
+  }
 }
