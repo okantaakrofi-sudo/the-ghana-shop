@@ -6,7 +6,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "The Ghana Shop | Natural Hair & Skin Care UAE",
-  description: "Authentic Ghanaian-inspired natural hair and skin products. Celebrating 13 years of beauty and heritage in the UAE.",
+  description: "Authentic Ghanaian-inspired care.",
+  icons: {
+    icon: "/icon.svg", // This points to the file you just made
+  },
 };
 
 export default function RootLayout({
