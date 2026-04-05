@@ -1,7 +1,7 @@
 import React from 'react';
-import "@/app/globals.css"; // Using the @ alias is safer
-import AnnouncementBar from "@/components/AnnouncementBar";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import "../globals.css";
+import AnnouncementBar from "../components/AnnouncementBar";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 export const metadata = {
   title: "The Ghana Shop | Authentic Organic Care UAE",
