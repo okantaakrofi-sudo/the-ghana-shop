@@ -1,5 +1,5 @@
-import AnnouncementBar from "@/components/AnnouncementBar";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import AnnouncementBar from "../components/AnnouncementBar";
+import WhatsAppButton from "../components/WhatsAppButton";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
