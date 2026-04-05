@@ -1,5 +1,5 @@
 import React from 'react';
-import "../globals.css";
+import "./globals.css";
 import AnnouncementBar from "../components/AnnouncementBar";
 import WhatsAppButton from "../components/WhatsAppButton";
 
