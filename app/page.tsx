@@ -38,12 +38,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         </div>
 
         <button 
-          onClick={handleAddToCart}
-          className="flex-1 bg-[#333] text-white py-4 rounded-full font-bold flex items-center justify-center gap-3 hover:bg-[#8b5e3c] transition-all shadow-lg active:scale-95"
-        >
-          <ShoppingCart size={20} />
-          ADD TO BASKET
-        </button>
+          onClick={handleWhatsAppOrder}
+          className="bg-[#333] text-white px-8 py-4 rounded-full font-bold flex items-center gap-2"
+>
+  <ShoppingCart size={20} />
+  ADD TO BASKET
+</button>
       </div>
 
       {/* ... the rest of your page ... */}
