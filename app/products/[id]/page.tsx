@@ -1,33 +1,19 @@
+'use client';
 
-import React from 'react';
-import { ShieldCheck, Truck, RotateCcw, Plus, Minus, ShoppingCart } from 'lucide-react';
-
-// This simulates your product database
-const productData: any = {
-  'hair-oil': {
-    name: "Mama Ghana Hair Oil",
-    price: 150,
-    originalPrice: 240,
-    description: "Our signature blend of traditional Ghanaian oils. Designed to stimulate the scalp, reduce breakage, and lock in moisture for 48 hours.",
-    benefits: ["Promotes Growth", "Scalp Health", "100% Organic"],
-    usage: "Massage into scalp 3 times a week. For deep conditioning, apply to ends and leave overnight.",
-    image: "/images/hair-oil.jpg"
-  },
-  'shea-oil': {
-    name: "Yellow Shea Oil",
-    price: 120, // Example price
-    description: "Liquid gold for your skin and hair. Lightweight, non-greasy, and deeply hydrating.",
-    benefits: ["Skin Glow", "Softens Hair", "Authentic Shea"],
-    usage: "Apply to damp skin after showering for best absorption.",
-    image: "/images/shea-oil.jpg"
-  }
-};
+import React, { useState } from 'react';
+import { ShoppingCart, Minus, Plus } from 'lucide-react';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
-  const product = productData[params.id] || productData['hair-oil'];
+  const [quantity, setQuantity] = useState(1);
+
+  const handleWhatsAppOrder = () => {
+    // This sends the order directly to your WhatsApp
+    const message = encodeURIComponent(`Hello Elorm! I would like to order ${quantity} bottle(s) of Mama Ghana Hair Oil.`);
+    window.location.href = `https://wa.me/971568394640?text=${message}`; // Replace with your number
+  };
 
   return (
-    <div className="min-h-screen bg-[#F9F7F2] pb-20">
+    <div className="min-h-screen bg-[#F9F7F2] p-8">
       <div className="container mx-auto px-6 pt-12 md:pt-24">
         <div className="flex flex-col md:flex-row gap-16">
           
